@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config'; // Import ConfigModule
+import { TrelloModule } from './trello/trello.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({isGlobal: true}), // Configure ConfigModule
+    TrelloModule,
+  ],
 })
 export class AppModule {}
