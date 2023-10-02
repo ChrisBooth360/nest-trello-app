@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trello Tasks</title>
+    <style>
+        /* Add your CSS styles here */
+    </style>
+</head>
+<body>
+    <h1>Trello Tasks</h1>
+    <ul id="task-list">
+        <!-- Tasks will be displayed here -->
+    </ul>
+    
+    <script>
+        // JavaScript code to fetch and display tasks
+        async function fetchTasks() {
+            try {
+                const response = await fetch('http://localhost:3001/trello/tasks');
+                const tasks = await response.json();
+                const taskList = document.getElementById('task-list');
+
+                // Clear any existing tasks
+                taskList.innerHTML = '';
+
+                // Display tasks in the list
+                tasks.forEach((task) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = task.name;
+                    taskList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
+        }
+
+        // Fetch and display tasks when the page loads
+        window.addEventListener('load', fetchTasks);
+    </script>
+</body>
+</html>
