@@ -1,6 +1,6 @@
 // src/trello/trello.controller.ts
 
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { TrelloService } from './trello.service';
 import { TrelloEntity } from './trello.entity';
 
@@ -8,9 +8,9 @@ import { TrelloEntity } from './trello.entity';
 export class TrelloController {
   constructor(private readonly trelloService: TrelloService) {}
 
-  @Get('tasks')
-  async getBoardTasks(): Promise<any> {
-    const tasks = await this.trelloService.getBoardTasks("GU6JzE3p");
+  @Get(':boardId/tasks')
+  async getBoardTasks(@Param('boardId') boardId: string): Promise<any> {
+    const tasks = await this.trelloService.getBoardTasks(boardId);
     return tasks;
   }
 
