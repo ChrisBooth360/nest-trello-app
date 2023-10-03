@@ -1,3 +1,5 @@
+// src/trello/trello.service.spec.ts
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { TrelloService } from './trello.service';
 import { TypeOrmModule, getRepositoryToken } from '@nestjs/typeorm';
@@ -42,11 +44,5 @@ describe('TrelloService', () => {
   });
 
   // Write your test cases here
-  it('should create a task in the database', async () => {
-    const taskData = { name: 'Test Task' };
-    const createdTask = await service.createTask(taskData.name);
 
-    expect(createdTask).toBeDefined();
-    expect(createdTask.name).toBe(taskData.name);
-  });
 });

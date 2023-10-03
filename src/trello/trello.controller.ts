@@ -15,9 +15,9 @@ export class TrelloController {
   }
 
   @Post('tasks')
-  async createTask(@Body() taskData: { name: string }): Promise<TrelloEntity> {
-    const { name } = taskData;
-    return await this.trelloService.createTask(name);
+  async createTask(@Body() taskData: { name: string, cardId: string, dueDate: string, completed: boolean }): Promise<TrelloEntity> {
+    const { name, cardId, dueDate, completed } = taskData;
+    return await this.trelloService.createTask(name, cardId, dueDate, completed);
   }
 
   @Get('saved-tasks')

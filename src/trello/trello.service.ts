@@ -11,6 +11,8 @@ import { TrelloEntity } from './trello.entity';
 interface TrelloBoardData {
   id: string;
   name: string;
+  due: string | null;
+  dueComplete: boolean | null;
   // Add more properties as needed
 }
 
@@ -23,6 +25,7 @@ type TrelloResponse<T> = {
 
 @Injectable()
 export class TrelloService {
+
   private readonly apiKey: string;
   private readonly apiToken: string;
   private readonly boardId: string;
@@ -49,23 +52,17 @@ export class TrelloService {
           },
         }
       );
-
-      const listResponse = await axios.get<TrelloBoardData[]>(
-        `https://api.trello.com/1/boards/${boardId}/cards`,
-        {
-          params: {
-            key: this.apiKey,
-            token: this.apiToken,
-          },
-        }
-      );
   
       const tasksFromTrello = taskResponse.data as TrelloBoardData[];
   
       // Iterate through the fetched tasks and save them to the database
       for (const taskData of tasksFromTrello) {
-        await this.createTask(taskData.name);
+        const { name, id, due, dueComplete } = taskData;
+      
+        // Convert null values to undefined to avoid issues with type mismatches
+        await this.createTask(name, id, due || undefined, dueComplete || undefined);
       }
+      
   
       const trelloResponse: TrelloResponse<T> = {
         data: tasksFromTrello as T,
@@ -82,20 +79,24 @@ export class TrelloService {
       return trelloResponse;
     }
   }
-  
 
-  async createTask(name: string): Promise<TrelloEntity> {
+  async createTask(name: string, cardId: string, dueDate: string | undefined, completed: boolean | undefined): Promise<TrelloEntity> {
     try {
-      const task = this.taskRepository.create({ name }); // Create a new instance
-      const savedTask = await this.taskRepository.save(task); // Save the instance
+      const task = new TrelloEntity();
+      task.name = name;
+      task.cardId = cardId;
+      task.dueDate = dueDate; // Assign 'dueDate' instead of 'due'
+      task.completed = completed; // Assign 'completed' instead of 'dueComplete'
   
+      const savedTask = await this.taskRepository.save(task);
       console.log('Task saved:', savedTask);
       return savedTask;
     } catch (error) {
       console.error('Error saving task:', error);
-      throw error; // Rethrow the error to handle it in the caller
-    }
+      throw error;
+    }  
   }
+  
   
 
   async getAllTasks(): Promise<TrelloEntity[]> {
