@@ -1,8 +1,7 @@
 {
     "type": "sqlite",
     "database": "database.sqlite",
-    "entities": ["dist/**/*.entity.ts"],
+    "entities": ["src/**/*.entity.ts"],
     "synchronize": true,
     "logging": true
 }
-  
