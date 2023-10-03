@@ -35,12 +35,12 @@ export class TrelloService {
     // Retrieve Trello API credentials from environment variables using ConfigService.
     this.apiKey = this.configService.get<string>('TRELLO_API_KEY');
     this.apiToken = this.configService.get<string>('TRELLO_API_TOKEN');
-    this.boardId = this.configService.get<string>('BOARD_ID');
+    
   }
 
   async getBoardTasks<T>(boardId: string): Promise<TrelloResponse<T>> {
     try {
-      const response = await axios.get<TrelloBoardData[]>(
+      const taskResponse = await axios.get<TrelloBoardData[]>(
         `https://api.trello.com/1/boards/${boardId}/cards`,
         {
           params: {
@@ -50,11 +50,28 @@ export class TrelloService {
         }
       );
 
+      const listResponse = await axios.get<TrelloBoardData[]>(
+        `https://api.trello.com/1/boards/${boardId}/cards`,
+        {
+          params: {
+            key: this.apiKey,
+            token: this.apiToken,
+          },
+        }
+      );
+  
+      const tasksFromTrello = taskResponse.data as TrelloBoardData[];
+  
+      // Iterate through the fetched tasks and save them to the database
+      for (const taskData of tasksFromTrello) {
+        await this.createTask(taskData.name);
+      }
+  
       const trelloResponse: TrelloResponse<T> = {
-        data: response.data as T,
+        data: tasksFromTrello as T,
         success: true,
       };
-
+  
       return trelloResponse;
     } catch (error) {
       const trelloResponse: TrelloResponse<T> = {
@@ -65,12 +82,21 @@ export class TrelloService {
       return trelloResponse;
     }
   }
+  
 
   async createTask(name: string): Promise<TrelloEntity> {
-    const task = new TrelloEntity();
-    task.name = name;
-    return await this.taskRepository.save(task);
+    try {
+      const task = this.taskRepository.create({ name }); // Create a new instance
+      const savedTask = await this.taskRepository.save(task); // Save the instance
+  
+      console.log('Task saved:', savedTask);
+      return savedTask;
+    } catch (error) {
+      console.error('Error saving task:', error);
+      throw error; // Rethrow the error to handle it in the caller
+    }
   }
+  
 
   async getAllTasks(): Promise<TrelloEntity[]> {
     return await this.taskRepository.find();

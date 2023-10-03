@@ -10,5 +10,10 @@ export class TrelloEntity {
   @Column()
   name: string;
 
-  // Add more properties as needed
+  @Column({ nullable: true })
+  list: string;
+
+  @Column({ nullable: true })
+  dueDate: string;
+
 }

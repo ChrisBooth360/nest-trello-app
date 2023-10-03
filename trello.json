@@ -1,0 +1,509 @@
+{
+	"data": [
+		{
+			"id": "651aa16644fe999ea02ba1ff",
+			"badges": {
+				"attachmentsByType": {
+					"trello": {
+						"board": 0,
+						"card": 0
+					}
+				},
+				"location": false,
+				"votes": 0,
+				"viewingMemberVoted": false,
+				"subscribed": false,
+				"fogbugz": "",
+				"checkItems": 0,
+				"checkItemsChecked": 0,
+				"checkItemsEarliestDue": null,
+				"comments": 0,
+				"attachments": 0,
+				"description": true,
+				"due": "2023-10-03T16:22:59.202Z",
+				"dueComplete": false,
+				"start": null
+			},
+			"checkItemStates": [],
+			"closed": false,
+			"dueComplete": false,
+			"dateLastActivity": "2023-10-02T16:23:15.730Z",
+			"desc": "For example: getBoardTasks<TrelloResponse<TrelloBoardData>>(boardId: string) … where TrelloResponse<T> is something like {data: T, success: boolean, error: string} and TrelloBoardData models the data you’re expecting fro Trello",
+			"descData": {
+				"emoji": {}
+			},
+			"due": "2023-10-03T16:22:59.202Z",
+			"dueReminder": -1,
+			"email": null,
+			"idBoard": "651aa023c244ebbdeeb89dbf",
+			"idChecklists": [],
+			"idList": "651aa02fd4d6e4a76777a6ca",
+			"idMembers": [],
+			"idMembersVoted": [],
+			"idShort": 6,
+			"idAttachmentCover": null,
+			"labels": [],
+			"idLabels": [],
+			"manualCoverAttachment": false,
+			"name": "Add a type and generic for the Trello response",
+			"pos": 32767.5,
+			"shortLink": "f7UgkBjr",
+			"shortUrl": "https://trello.com/c/f7UgkBjr",
+			"start": null,
+			"subscribed": false,
+			"url": "https://trello.com/c/f7UgkBjr/6-add-a-type-and-generic-for-the-trello-response",
+			"cover": {
+				"idAttachment": null,
+				"color": null,
+				"idUploadedBackground": null,
+				"size": "normal",
+				"brightness": "dark",
+				"idPlugin": null
+			},
+			"isTemplate": false,
+			"cardRole": null
+		},
+		{
+			"id": "651aa06fc45032f388850f20",
+			"badges": {
+				"attachmentsByType": {
+					"trello": {
+						"board": 0,
+						"card": 0
+					}
+				},
+				"location": false,
+				"votes": 0,
+				"viewingMemberVoted": false,
+				"subscribed": false,
+				"fogbugz": "",
+				"checkItems": 0,
+				"checkItemsChecked": 0,
+				"checkItemsEarliestDue": null,
+				"comments": 0,
+				"attachments": 0,
+				"description": false,
+				"due": "2023-10-03T16:23:36.625Z",
+				"dueComplete": false,
+				"start": "2023-10-02T06:00:59.202Z"
+			},
+			"checkItemStates": [],
+			"closed": false,
+			"dueComplete": false,
+			"dateLastActivity": "2023-10-02T16:23:41.656Z",
+			"desc": "",
+			"descData": {
+				"emoji": {}
+			},
+			"due": "2023-10-03T16:23:36.625Z",
+			"dueReminder": -1,
+			"email": null,
+			"idBoard": "651aa023c244ebbdeeb89dbf",
+			"idChecklists": [],
+			"idList": "651aa02fd4d6e4a76777a6ca",
+			"idMembers": [],
+			"idMembersVoted": [],
+			"idShort": 1,
+			"idAttachmentCover": null,
+			"labels": [],
+			"idLabels": [],
+			"manualCoverAttachment": false,
+			"name": "Write README for Trello Application",
+			"pos": 65535,
+			"shortLink": "2vQEPTsN",
+			"shortUrl": "https://trello.com/c/2vQEPTsN",
+			"start": "2023-10-02T06:00:59.202Z",
+			"subscribed": false,
+			"url": "https://trello.com/c/2vQEPTsN/1-write-readme-for-trello-application",
+			"cover": {
+				"idAttachment": null,
+				"color": null,
+				"idUploadedBackground": null,
+				"size": "normal",
+				"brightness": "dark",
+				"idPlugin": null
+			},
+			"isTemplate": false,
+			"cardRole": null
+		},
+		{
+			"id": "651aa0987713a36343380074",
+			"badges": {
+				"attachmentsByType": {
+					"trello": {
+						"board": 0,
+						"card": 0
+					}
+				},
+				"location": false,
+				"votes": 0,
+				"viewingMemberVoted": false,
+				"subscribed": false,
+				"fogbugz": "",
+				"checkItems": 0,
+				"checkItemsChecked": 0,
+				"checkItemsEarliestDue": null,
+				"comments": 0,
+				"attachments": 0,
+				"description": false,
+				"due": null,
+				"dueComplete": false,
+				"start": null
+			},
+			"checkItemStates": [],
+			"closed": false,
+			"dueComplete": false,
+			"dateLastActivity": "2023-10-02T10:51:04.253Z",
+			"desc": "",
+			"descData": {
+				"emoji": {}
+			},
+			"due": null,
+			"dueReminder": null,
+			"email": null,
+			"idBoard": "651aa023c244ebbdeeb89dbf",
+			"idChecklists": [],
+			"idList": "651aa02fd4d6e4a76777a6ca",
+			"idMembers": [],
+			"idMembersVoted": [],
+			"idShort": 2,
+			"idAttachmentCover": null,
+			"labels": [],
+			"idLabels": [],
+			"manualCoverAttachment": false,
+			"name": "Write README for Bookmark Application",
+			"pos": 131071,
+			"shortLink": "tZ3ZBQ7q",
+			"shortUrl": "https://trello.com/c/tZ3ZBQ7q",
+			"start": null,
+			"subscribed": false,
+			"url": "https://trello.com/c/tZ3ZBQ7q/2-write-readme-for-bookmark-application",
+			"cover": {
+				"idAttachment": null,
+				"color": null,
+				"idUploadedBackground": null,
+				"size": "normal",
+				"brightness": "dark",
+				"idPlugin": null
+			},
+			"isTemplate": false,
+			"cardRole": null
+		},
+		{
+			"id": "651aa0b3bc9be7a4f7f0e495",
+			"badges": {
+				"attachmentsByType": {
+					"trello": {
+						"board": 0,
+						"card": 0
+					}
+				},
+				"location": false,
+				"votes": 0,
+				"viewingMemberVoted": false,
+				"subscribed": false,
+				"fogbugz": "",
+				"checkItems": 0,
+				"checkItemsChecked": 0,
+				"checkItemsEarliestDue": null,
+				"comments": 0,
+				"attachments": 0,
+				"description": false,
+				"due": null,
+				"dueComplete": false,
+				"start": null
+			},
+			"checkItemStates": [],
+			"closed": false,
+			"dueComplete": false,
+			"dateLastActivity": "2023-10-02T10:51:31.339Z",
+			"desc": "",
+			"descData": {
+				"emoji": {}
+			},
+			"due": null,
+			"dueReminder": null,
+			"email": null,
+			"idBoard": "651aa023c244ebbdeeb89dbf",
+			"idChecklists": [],
+			"idList": "651aa02fd4d6e4a76777a6ca",
+			"idMembers": [],
+			"idMembersVoted": [],
+			"idShort": 4,
+			"idAttachmentCover": null,
+			"labels": [],
+			"idLabels": [],
+			"manualCoverAttachment": false,
+			"name": "Write test for Trello Application",
+			"pos": 196607,
+			"shortLink": "ajFbxfZy",
+			"shortUrl": "https://trello.com/c/ajFbxfZy",
+			"start": null,
+			"subscribed": false,
+			"url": "https://trello.com/c/ajFbxfZy/4-write-test-for-trello-application",
+			"cover": {
+				"idAttachment": null,
+				"color": null,
+				"idUploadedBackground": null,
+				"size": "normal",
+				"brightness": "dark",
+				"idPlugin": null
+			},
+			"isTemplate": false,
+			"cardRole": null
+		},
+		{
+			"id": "651aa0ed8a28b4d50a6612ff",
+			"badges": {
+				"attachmentsByType": {
+					"trello": {
+						"board": 0,
+						"card": 0
+					}
+				},
+				"location": false,
+				"votes": 0,
+				"viewingMemberVoted": false,
+				"subscribed": false,
+				"fogbugz": "",
+				"checkItems": 0,
+				"checkItemsChecked": 0,
+				"checkItemsEarliestDue": null,
+				"comments": 0,
+				"attachments": 0,
+				"description": false,
+				"due": null,
+				"dueComplete": false,
+				"start": null
+			},
+			"checkItemStates": [],
+			"closed": false,
+			"dueComplete": false,
+			"dateLastActivity": "2023-10-02T10:52:29.244Z",
+			"desc": "",
+			"descData": {
+				"emoji": {}
+			},
+			"due": null,
+			"dueReminder": null,
+			"email": null,
+			"idBoard": "651aa023c244ebbdeeb89dbf",
+			"idChecklists": [],
+			"idList": "651aa02fd4d6e4a76777a6ca",
+			"idMembers": [],
+			"idMembersVoted": [],
+			"idShort": 5,
+			"idAttachmentCover": null,
+			"labels": [],
+			"idLabels": [],
+			"manualCoverAttachment": false,
+			"name": "Trello App: Make URL a magic string",
+			"pos": 262143,
+			"shortLink": "pjko2pW6",
+			"shortUrl": "https://trello.com/c/pjko2pW6",
+			"start": null,
+			"subscribed": false,
+			"url": "https://trello.com/c/pjko2pW6/5-trello-app-make-url-a-magic-string",
+			"cover": {
+				"idAttachment": null,
+				"color": null,
+				"idUploadedBackground": null,
+				"size": "normal",
+				"brightness": "dark",
+				"idPlugin": null
+			},
+			"isTemplate": false,
+			"cardRole": null
+		},
+		{
+			"id": "651aa1f8289cb562851c47f6",
+			"badges": {
+				"attachmentsByType": {
+					"trello": {
+						"board": 0,
+						"card": 0
+					}
+				},
+				"location": false,
+				"votes": 0,
+				"viewingMemberVoted": false,
+				"subscribed": false,
+				"fogbugz": "",
+				"checkItems": 0,
+				"checkItemsChecked": 0,
+				"checkItemsEarliestDue": null,
+				"comments": 0,
+				"attachments": 0,
+				"description": false,
+				"due": null,
+				"dueComplete": false,
+				"start": null
+			},
+			"checkItemStates": [],
+			"closed": false,
+			"dueComplete": false,
+			"dateLastActivity": "2023-10-02T10:56:56.607Z",
+			"desc": "",
+			"descData": {
+				"emoji": {}
+			},
+			"due": null,
+			"dueReminder": null,
+			"email": null,
+			"idBoard": "651aa023c244ebbdeeb89dbf",
+			"idChecklists": [],
+			"idList": "651aa02fd4d6e4a76777a6ca",
+			"idMembers": [],
+			"idMembersVoted": [],
+			"idShort": 8,
+			"idAttachmentCover": null,
+			"labels": [],
+			"idLabels": [],
+			"manualCoverAttachment": false,
+			"name": "Add front end to show a list of tasks",
+			"pos": 458751,
+			"shortLink": "yUfAC9Qo",
+			"shortUrl": "https://trello.com/c/yUfAC9Qo",
+			"start": null,
+			"subscribed": false,
+			"url": "https://trello.com/c/yUfAC9Qo/8-add-front-end-to-show-a-list-of-tasks",
+			"cover": {
+				"idAttachment": null,
+				"color": null,
+				"idUploadedBackground": null,
+				"size": "normal",
+				"brightness": "dark",
+				"idPlugin": null
+			},
+			"isTemplate": false,
+			"cardRole": null
+		},
+		{
+			"id": "651aa0a7d3c8ac2443c0e26c",
+			"badges": {
+				"attachmentsByType": {
+					"trello": {
+						"board": 0,
+						"card": 0
+					}
+				},
+				"location": false,
+				"votes": 0,
+				"viewingMemberVoted": false,
+				"subscribed": false,
+				"fogbugz": "",
+				"checkItems": 0,
+				"checkItemsChecked": 0,
+				"checkItemsEarliestDue": null,
+				"comments": 0,
+				"attachments": 0,
+				"description": false,
+				"due": null,
+				"dueComplete": false,
+				"start": null
+			},
+			"checkItemStates": [],
+			"closed": false,
+			"dueComplete": false,
+			"dateLastActivity": "2023-10-02T10:51:19.829Z",
+			"desc": "",
+			"descData": {
+				"emoji": {}
+			},
+			"due": null,
+			"dueReminder": null,
+			"email": null,
+			"idBoard": "651aa023c244ebbdeeb89dbf",
+			"idChecklists": [],
+			"idList": "651aa040cf2f66137900db26",
+			"idMembers": [],
+			"idMembersVoted": [],
+			"idShort": 3,
+			"idAttachmentCover": null,
+			"labels": [],
+			"idLabels": [],
+			"manualCoverAttachment": false,
+			"name": "Debugging Trello Application",
+			"pos": 65535,
+			"shortLink": "khQm18Dd",
+			"shortUrl": "https://trello.com/c/khQm18Dd",
+			"start": null,
+			"subscribed": false,
+			"url": "https://trello.com/c/khQm18Dd/3-debugging-trello-application",
+			"cover": {
+				"idAttachment": null,
+				"color": null,
+				"idUploadedBackground": null,
+				"size": "normal",
+				"brightness": "dark",
+				"idPlugin": null
+			},
+			"isTemplate": false,
+			"cardRole": null
+		},
+		{
+			"id": "651aa1ec25d3938a6ec2b0be",
+			"badges": {
+				"attachmentsByType": {
+					"trello": {
+						"board": 0,
+						"card": 0
+					}
+				},
+				"location": false,
+				"votes": 0,
+				"viewingMemberVoted": false,
+				"subscribed": false,
+				"fogbugz": "",
+				"checkItems": 0,
+				"checkItemsChecked": 0,
+				"checkItemsEarliestDue": null,
+				"comments": 0,
+				"attachments": 0,
+				"description": false,
+				"due": null,
+				"dueComplete": false,
+				"start": null
+			},
+			"checkItemStates": [],
+			"closed": false,
+			"dueComplete": false,
+			"dateLastActivity": "2023-10-02T16:22:42.911Z",
+			"desc": "",
+			"descData": {
+				"emoji": {}
+			},
+			"due": null,
+			"dueReminder": null,
+			"email": null,
+			"idBoard": "651aa023c244ebbdeeb89dbf",
+			"idChecklists": [],
+			"idList": "651aa05876dbba7a31a2483f",
+			"idMembers": [],
+			"idMembersVoted": [],
+			"idShort": 7,
+			"idAttachmentCover": null,
+			"labels": [],
+			"idLabels": [],
+			"manualCoverAttachment": false,
+			"name": "Add a SQLite DB and ORM to store the data",
+			"pos": 393215,
+			"shortLink": "MeDd4uTB",
+			"shortUrl": "https://trello.com/c/MeDd4uTB",
+			"start": null,
+			"subscribed": false,
+			"url": "https://trello.com/c/MeDd4uTB/7-add-a-sqlite-db-and-orm-to-store-the-data",
+			"cover": {
+				"idAttachment": null,
+				"color": null,
+				"idUploadedBackground": null,
+				"size": "normal",
+				"brightness": "dark",
+				"idPlugin": null
+			},
+			"isTemplate": false,
+			"cardRole": null
+		}
+	],
+	"success": true
+}
