@@ -18,7 +18,7 @@
         // JavaScript code to fetch and display tasks
         async function fetchTasks() {
             try {
-                const response = await fetch('http://localhost:3001/trello/tasks');
+                const response = await fetch('http://localhost:3000/trello/saved-tasks'); // Update the URL to your server's endpoint
                 const tasks = await response.json();
                 const taskList = document.getElementById('task-list');
 
@@ -28,7 +28,7 @@
                 // Display tasks in the list
                 tasks.forEach((task) => {
                     const listItem = document.createElement('li');
-                    listItem.textContent = task.name;
+                    listItem.textContent = `Name: ${task.name}, Completed: ${task.completed}, Due Date: ${task.dueDate}, Card ID: ${task.cardId}`;
                     taskList.appendChild(listItem);
                 });
             } catch (error) {

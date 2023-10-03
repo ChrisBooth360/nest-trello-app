@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, getRepository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { TrelloEntity } from './trello.entity';
 
 // Define the TrelloBoardData interface
@@ -12,7 +12,7 @@ interface TrelloBoardData {
   id: string;
   name: string;
   due: string | null;
-  dueComplete: boolean | null;
+  desc: string | null;
   // Add more properties as needed
 }
 
@@ -57,10 +57,10 @@ export class TrelloService {
   
       // Iterate through the fetched tasks and save them to the database
       for (const taskData of tasksFromTrello) {
-        const { name, id, due, dueComplete } = taskData;
+        const { name, id, due, desc } = taskData;
       
         // Convert null values to undefined to avoid issues with type mismatches
-        await this.createTask(name, id, due || undefined, dueComplete || undefined);
+        await this.createTask(name, id, due || undefined, desc || undefined);
       }
       
   
@@ -80,7 +80,7 @@ export class TrelloService {
     }
   }
 
-  async createTask(name: string, cardId: string, dueDate: string | undefined, completed: boolean | undefined): Promise<TrelloEntity> {
+  async createTask(name: string, cardId: string, dueDate: string | undefined, description: string | undefined): Promise<TrelloEntity> {
     try {
       // Check if a task with the same cardId exists.
       let existingTask = await this.taskRepository.findOne({ where: { cardId } });
@@ -89,7 +89,7 @@ export class TrelloService {
         // If a task with the same cardId exists, update it
         existingTask.name = name;
         existingTask.dueDate = dueDate;
-        existingTask.completed = completed;
+        existingTask.description = description;
   
         const updatedTask = await this.taskRepository.save(existingTask);
         console.log('Task updated:', updatedTask);
@@ -100,7 +100,7 @@ export class TrelloService {
         newTask.name = name;
         newTask.cardId = cardId;
         newTask.dueDate = dueDate;
-        newTask.completed = completed;
+        newTask.description = description;
   
         const savedTask = await this.taskRepository.save(newTask);
         console.log('Task saved:', savedTask);
@@ -111,10 +111,6 @@ export class TrelloService {
       throw error;
     }
   }
-  
-  
-  
-  
 
   async getAllTasks(): Promise<TrelloEntity[]> {
     return await this.taskRepository.find();
