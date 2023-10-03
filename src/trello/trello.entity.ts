@@ -16,7 +16,7 @@ export class TrelloEntity {
   @Column({ name: 'dueDate', nullable: true }) // Map 'dueDate' property to 'dueDate' column in the database
   dueDate: string;
 
-  @Column({ name: 'cardId', nullable: true }) // Map 'cardId' property to 'cardId' column in the database
+  @Column({ name: 'cardId', unique: true }) // Map 'cardId' property to 'cardId' column in the database
   cardId: string;
 
 }

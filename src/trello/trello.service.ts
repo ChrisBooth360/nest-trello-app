@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, getRepository } from 'typeorm';
 import { TrelloEntity } from './trello.entity';
 
 // Define the TrelloBoardData interface
@@ -82,20 +82,37 @@ export class TrelloService {
 
   async createTask(name: string, cardId: string, dueDate: string | undefined, completed: boolean | undefined): Promise<TrelloEntity> {
     try {
-      const task = new TrelloEntity();
-      task.name = name;
-      task.cardId = cardId;
-      task.dueDate = dueDate; // Assign 'dueDate' instead of 'due'
-      task.completed = completed; // Assign 'completed' instead of 'dueComplete'
+      // Check if a task with the same cardId exists.
+      let existingTask = await this.taskRepository.findOne({ where: { cardId } });
   
-      const savedTask = await this.taskRepository.save(task);
-      console.log('Task saved:', savedTask);
-      return savedTask;
+      if (existingTask) {
+        // If a task with the same cardId exists, update it
+        existingTask.name = name;
+        existingTask.dueDate = dueDate;
+        existingTask.completed = completed;
+  
+        const updatedTask = await this.taskRepository.save(existingTask);
+        console.log('Task updated:', updatedTask);
+        return updatedTask;
+      } else {
+        // If no task with the same cardId exists, create a new task
+        const newTask = new TrelloEntity();
+        newTask.name = name;
+        newTask.cardId = cardId;
+        newTask.dueDate = dueDate;
+        newTask.completed = completed;
+  
+        const savedTask = await this.taskRepository.save(newTask);
+        console.log('Task saved:', savedTask);
+        return savedTask;
+      }
     } catch (error) {
-      console.error('Error saving task:', error);
+      console.error('Error saving/updating task:', error);
       throw error;
-    }  
+    }
   }
+  
+  
   
   
 
