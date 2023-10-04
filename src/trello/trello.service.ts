@@ -27,6 +27,7 @@ export class TrelloService {
 
   private readonly apiKey: string;
   private readonly apiToken: string;
+  private readonly boardId: string;
 
   constructor(
     private readonly configService: ConfigService,
