@@ -7,13 +7,13 @@
 </head>
 
 <body>
-    <h1> Trello tasks</h1>
+    <h1>Trello tasks</h1>
     <div id="inputContainer">
         <label for="boardUrl">Enter Trello Board URL:</label>
         <input type="text" id="boardUrl" placeholder="https://trello.com/b/boardId">
         <button id="submitUrl">Submit</button>
     </div>
-    
+
     <div id="taskContainer" style="display:none;">
         <table>
             <thead>
@@ -26,7 +26,7 @@
             <tbody id="taskTableBody"></tbody>
         </table>
         <button id="refreshButton">Refresh Tasks</button>
-        
+        <button id="changeBoardButton">Change Board</button>
     </div>
 
     <script>
@@ -36,7 +36,7 @@
         const submitUrlButton = document.getElementById("submitUrl");
         const taskTableBody = document.getElementById("taskTableBody");
         const refreshButton = document.getElementById("refreshButton");
-
+        const changeBoardButton = document.getElementById("changeBoardButton");
 
         // Define the base URL for the API
         const apiBaseUrl = "http://localhost:3000/trello";
@@ -48,26 +48,11 @@
             taskContainer.style.display = "block";
         }
 
-        // Add a click event listener to the Submit button
-        submitUrlButton.addEventListener("click", async () => {
-            const url = boardUrlInput.value.trim();
-            if (url) {
-                // Extract the boardId from the URL (you may need to adjust the extraction logic)
-                let parts = url.split('/');
-                console.log(parts)
-                let boardId = parts[parts.length - 2];
-                console.log(boardId)
-                console.log(`${apiBaseUrl}/${boardId}/tasks`)
-
-                toggleContainers();
-                await refreshTasks();
-            }
-        });
-
-        // Define a function to fetch and display tasks
+        // Function to fetch and display tasks
         async function fetchAndDisplayTasks() {
             try {
-                const response = await fetch(`${apiBaseUrl}/saved-tasks`, {
+                const response = await fetch(`${apiBaseUrl}/${boardId}/tasks`, {
+                    method: 'GET',
                     credentials: 'include', // Include credentials in the request
                 });
 
@@ -75,17 +60,17 @@
 
                 console.log("Received JSON response:", tasks);
 
-                if (tasks.length > 0) {
+                if (tasks.success && tasks.data.length > 0) {
                     // Clear the table body
                     taskTableBody.innerHTML = "";
 
                     // Iterate through tasks and add rows to the table
-                    tasks.forEach(task => {
+                    tasks.data.forEach(task => {
                         const row = document.createElement("tr");
                         row.innerHTML = `
                             <td>${task.name}</td>
-                            <td>${task.description || 'N/A'}</td>
-                            <td>${task.dueDate || 'N/A'}</td>
+                            <td>${task.desc || 'N/A'}</td>
+                            <td>${task.due || 'N/A'}</td>
                         `;
                         taskTableBody.appendChild(row);
                     });
@@ -98,25 +83,29 @@
             }
         }
 
-        async function refreshTasks() {
-            try {
-                // Call your backend to fetch tasks from the Trello board and add them to the database
-                await fetch(`${apiBaseUrl}/${boardId}/tasks`, {
-                    method: 'GET',
-                    credentials: 'include',
-                });
+        // Add a click event listener to the Submit button
+        submitUrlButton.addEventListener("click", async () => {
+            const url = boardUrlInput.value.trim();
+            if (url) {
+                // Extract the boardId from the URL (you may need to adjust the extraction logic)
+                let parts = url.split('/');
+                boardId = parts[parts.length - 2]; // Updated boardId extraction
+                console.log(boardId)
 
-                // After adding tasks, fetch and display them
-                fetchAndDisplayTasks();
-            } catch (error) {
-                console.error("Error refreshing tasks:", error);
-                taskTableBody.innerHTML = `<tr><td colspan='3'>Error refreshing tasks: ${error.message}</td></tr>`;
+                toggleContainers();
+                await fetchAndDisplayTasks();
             }
-        }
+        });
 
         // Add click event listeners to the Refresh Tasks and Change Board buttons
-        refreshButton.addEventListener("click", refreshTasks);
-        
+        refreshButton.addEventListener("click", fetchAndDisplayTasks);
+        changeBoardButton.addEventListener("click", () => {
+            // Show the input container and hide the task container
+            inputContainer.style.display = "block";
+            taskContainer.style.display = "none";
+            // Clear the boardId
+            boardId = null;
+        });
     </script>
 </body>
 
