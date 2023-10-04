@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Trello Tasks</title>
+</head>
+
+<body>
+    <h1> Trello tasks</h1>
+    <div id="taskContainer">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Due Date</th>
+                </tr>
+            </thead>
+            <tbody id="taskTableBody"></tbody>
+        </table>
+        <button id="refreshButton">Refresh Tasks</button>
+    </div>
+
+    <script>
+        const taskTableBody = document.getElementById("taskTableBody");
+        const refreshButton = document.getElementById("refreshButton");
+
+        // Define a function to fetch and display tasks
+        async function fetchAndDisplayTasks() {
+            try {
+                const response = await fetch("http://localhost:3000/trello/saved-tasks", {
+                    credentials: 'include', // Include credentials in the request
+                });
+
+                const tasks = await response.json();
+
+                console.log("Received JSON response:", tasks);
+
+                if (tasks.length > 0) {
+                    // Clear the table body
+                    taskTableBody.innerHTML = "";
+
+                    // Iterate through tasks and add rows to the table
+                    tasks.forEach(task => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${task.name}</td>
+                            <td>${task.description || 'N/A'}</td>
+                            <td>${task.dueDate || 'N/A'}</td>
+                        `;
+                        taskTableBody.appendChild(row);
+                    });
+                } else {
+                    taskTableBody.innerHTML = "<tr><td colspan='3'>No tasks found.</td></tr>";
+                }
+            } catch (error) {
+                console.error("Error fetching tasks:", error);
+                taskTableBody.innerHTML = `<tr><td colspan='3'>Error fetching tasks: ${error.message}</td></tr>`;
+            }
+        }
+
+        async function refreshTasks() {
+            try {
+                // Call your backend to fetch tasks from the Trello board and add them to the database
+                await fetch("http://localhost:3000/trello/OoAkCCdg/tasks", {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+
+                // After adding tasks, fetch and display them
+                fetchAndDisplayTasks();
+            } catch (error) {
+                console.error("Error refreshing tasks:", error);
+                taskTableBody.innerHTML = `<tr><td colspan='3'>Error refreshing tasks: ${error.message}</td></tr>`;
+            }
+        }
+
+        // Call the function when the page loads
+        window.addEventListener("load", refreshTasks);
+        // A click event listener to the refresh button
+        refreshButton.addEventListener("click", refreshTasks);
+    </script>
+</body>
+
+</html>
