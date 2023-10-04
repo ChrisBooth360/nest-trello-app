@@ -28,7 +28,10 @@ Before you begin, ensure you have the following installed:
 `TRELLO_API_KEY="your-trello-api-key"`
 `TRELLO_API_TOKEN="your-trello-api-token"`
 
-Replace "your-trello-api-key" and "your-trello-api-token" "your-board-id" with your actual Trello API credentials.
+Replace "your-trello-api-key" and "your-trello-api-token" with your actual Trello API credentials. The application makes use of configServices to retrieve the tokens from the .env file:
+
+`this.apiKey = this.configService.get<string>('TRELLO_API_KEY');`
+`this.apiToken = this.configService.get<string>('TRELLO_API_TOKEN');`
 
 2. Configure the `ormconfig.json file if needed. By default, it uses an SQLite database. Make sure the database configuration matches your environment.
 
@@ -36,6 +39,10 @@ Replace "your-trello-api-key" and "your-trello-api-token" "your-board-id" with y
 1. Start the application in development mode:
 
 `yarn start:dev`
+
+2. Start the server
+
+`http-server`
 
 2. Open a web browser and navigate to http://localhost:3000.
 
