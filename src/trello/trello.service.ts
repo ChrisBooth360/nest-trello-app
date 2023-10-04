@@ -27,7 +27,6 @@ export class TrelloService {
 
   private readonly apiKey: string;
   private readonly apiToken: string;
-  private readonly boardId: string;
 
   constructor(
     private readonly configService: ConfigService,
@@ -53,7 +52,8 @@ export class TrelloService {
       );
   
       const tasksFromTrello = taskResponse.data as TrelloBoardData[];
-  
+        
+      await this.taskRepository.clear();
       // Iterate through the fetched tasks and save them to the database
       for (const taskData of tasksFromTrello) {
         const { name, id, due, desc } = taskData;
@@ -81,21 +81,7 @@ export class TrelloService {
 
   async createTask(name: string, cardId: string, dueDate: string | undefined, description: string | undefined): Promise<TrelloEntity> {
     try {
-      // Check if a task with the same cardId exists.
-      let existingTask = await this.taskRepository.findOne({ where: { cardId } });
-  
-      if (existingTask) {
-        // If a task with the same cardId exists, update it
-        existingTask.name = name;
-        existingTask.dueDate = dueDate;
-        existingTask.description = description;
-  
-        const updatedTask = await this.taskRepository.save(existingTask);
-        console.log('Task updated:', updatedTask);
-        return updatedTask;
-      } else {
-        // If no task with the same cardId exists, create a new task
-        const newTask = new TrelloEntity();
+      const newTask = new TrelloEntity();
         newTask.name = name;
         newTask.cardId = cardId;
         newTask.dueDate = dueDate;
@@ -104,7 +90,6 @@ export class TrelloService {
         const savedTask = await this.taskRepository.save(newTask);
         console.log('Task saved:', savedTask);
         return savedTask;
-      }
     } catch (error) {
       console.error('Error saving/updating task:', error);
       throw error;
