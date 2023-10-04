@@ -1,6 +1,6 @@
 // src/trello/trello.controller.ts
 
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Req } from '@nestjs/common';
 import { TrelloService } from './trello.service';
 import { TrelloEntity } from './trello.entity';
 
@@ -21,7 +21,10 @@ export class TrelloController {
   }
 
   @Get('saved-tasks')
-  async getSavedTasks(): Promise<TrelloEntity[]> {
-    return await this.trelloService.getAllTasks();
+  async getSavedTasks(@Req() request): Promise<TrelloEntity[]> { // Specify the return type as TrelloEntity[]
+    const boardId = process.env.BOARD_ID; // Read BOARD_ID from .env
+    const tasks = await this.trelloService.getBoardTasks(boardId);
+    return tasks.data as TrelloEntity[]; // Return the data property as TrelloEntity[]
   }
 }
+

@@ -25,11 +25,15 @@
     <script>
         const taskTableBody = document.getElementById("taskTableBody");
         const refreshButton = document.getElementById("refreshButton");
+        // Read the BOARD_ID from the .env file
+        const boardId = "<%= process.env.BOARD_ID %>";
+        // Define the base URL for the API
+        const apiBaseUrl = "http://localhost:3000/trello";
 
         // Define a function to fetch and display tasks
         async function fetchAndDisplayTasks() {
             try {
-                const response = await fetch("http://localhost:3000/trello/saved-tasks", {
+                const response = await fetch(`${apiBaseUrl}/saved-tasks`, {
                     credentials: 'include', // Include credentials in the request
                 });
 
@@ -63,7 +67,7 @@
         async function refreshTasks() {
             try {
                 // Call your backend to fetch tasks from the Trello board and add them to the database
-                await fetch("http://localhost:3000/trello/OoAkCCdg/tasks", {
+                await fetch(`${apiBaseUrl}/${boardId}/tasks`, {
                     method: 'GET',
                     credentials: 'include',
                 });

@@ -13,7 +13,6 @@ interface TrelloBoardData {
   name: string;
   due: string | null;
   desc: string | null;
-  // Add more properties as needed
 }
 
 // Define the TrelloResponse type
@@ -28,7 +27,6 @@ export class TrelloService {
 
   private readonly apiKey: string;
   private readonly apiToken: string;
-  private readonly boardId: string;
 
   constructor(
     private readonly configService: ConfigService,

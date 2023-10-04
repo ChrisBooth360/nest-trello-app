@@ -100,6 +100,77 @@ describe('TrelloService', () => {
     });
   });
 
-  // Add more test cases for other methods as needed
+  describe('createTask', () => {
+    it('should create a task', async () => {
+      // Arrange
+      const name = 'Test Task';
+      const cardId = '12345';
+      const dueDate = '2023-12-31';
+      const description = 'Test description';
+
+      const newTask = new TrelloEntity();
+      newTask.name = name;
+      newTask.cardId = cardId;
+      newTask.dueDate = dueDate;
+      newTask.description = description;
+
+      const mockSavedTask = { ...newTask };
+
+      mockTaskRepository.findOne.mockResolvedValueOnce(undefined);
+      mockTaskRepository.save.mockResolvedValueOnce(mockSavedTask);
+
+      // Act
+      const result = await trelloService.createTask(name, cardId, dueDate, description);
+
+      // Assert
+      expect(mockTaskRepository.findOne).toHaveBeenCalledWith({ where: { cardId } });
+      expect(mockTaskRepository.save).toHaveBeenCalledWith(newTask);
+      expect(result).toEqual(mockSavedTask);
+    });
+
+    it('should update an existing task', async () => {
+      // Arrange
+      const name = 'Updated Task Name';
+      const cardId = '12345';
+      const dueDate = '2023-11-31';
+      const description = 'Updated Task Description';
+
+      const existingTask = new TrelloEntity();
+      existingTask.name = 'Original Task Name';
+      existingTask.cardId = cardId;
+
+      mockTaskRepository.findOne.mockResolvedValueOnce(existingTask);
+
+      const updatedTask = { ...existingTask };
+      updatedTask.name = name;
+      updatedTask.dueDate = dueDate;
+      updatedTask.description = description;
+
+      mockTaskRepository.save.mockResolvedValueOnce(updatedTask);
+
+      // Act
+      const result = await trelloService.createTask(name, cardId, dueDate, description);
+
+      // Assert
+      expect(mockTaskRepository.findOne).toHaveBeenCalledWith({ where: { cardId } });
+      expect(mockTaskRepository.save).toHaveBeenCalledWith(updatedTask);
+      expect(result).toEqual(updatedTask);
+    });
+
+    it('should handle errors', async () => {
+      // Arrange
+      const name = 'Test Task';
+      const cardId = 'test-card-id';
+      const dueDate = '2023-12-31';
+      const description = 'Test description';
+
+      mockTaskRepository.findOne.mockRejectedValueOnce(new Error('Database error'));
+
+      // Act & Assert
+      await expect(
+        trelloService.createTask(name, cardId, dueDate, description)
+      ).rejects.toThrowError('Database error');
+    });
+  });
 
 });
