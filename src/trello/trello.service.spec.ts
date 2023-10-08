@@ -57,7 +57,7 @@ describe('TrelloService', () => {
     jest.clearAllMocks();
   });
 
-  describe('getBoardTasks', () => {
+  describe('getTasks', () => {
     it('should fetch board tasks from Trello', async () => {
       const boardId = 'sample-board-id';
       const responseData = [
@@ -72,7 +72,7 @@ describe('TrelloService', () => {
 
       axiosGetMock.mockResolvedValueOnce({ data: responseData });
 
-      const result = await trelloService.getBoardTasks(boardId);
+      const result = await trelloService.getTasks(boardId);
 
       expect(axiosGetMock).toHaveBeenCalledWith(
         `https://api.trello.com/1/boards/${boardId}/cards`,
@@ -93,7 +93,7 @@ describe('TrelloService', () => {
 
       axiosGetMock.mockRejectedValueOnce(new Error('Network Error'));
 
-      const result = await trelloService.getBoardTasks(boardId);
+      const result = await trelloService.getTasks(boardId);
 
       expect(result.success).toBeFalsy();
       expect(result.error).toContain('Error fetching tasks from Trello');

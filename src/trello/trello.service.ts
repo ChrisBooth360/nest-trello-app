@@ -39,7 +39,7 @@ export class TrelloService {
     
   }
 
-  async getBoardTasks<T>(boardId: string): Promise<TrelloResponse<T>> {
+  async getTasks<T>(boardId: string): Promise<TrelloResponse<T>> {
     try {
       const taskResponse = await axios.get<TrelloBoardData[]>(
         `https://api.trello.com/1/boards/${boardId}/cards`,

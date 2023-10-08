@@ -3,16 +3,18 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
+import * as ejs from 'ejs';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.useStaticAssets('public'); // Serve static files from the 'public' directory
+  
+  // Set EJS as the view engine
+  app.engine('ejs', ejs.renderFile);
+  app.setViewEngine('ejs');
+  
+  // app.useStaticAssets('public'); // Serve static files from the 'public' directory
 
-  // Configure CORS here
-  app.enableCors({
-    origin: 'http://localhost:3000', // Add where the frontend is hosted
-    credentials: true,
-  });
+ 
 
   await app.listen(3000);
 }

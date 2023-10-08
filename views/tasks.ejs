@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trello Tasks</title>
+</head>
+<body>
+    <h1>Trello tasks</h1>
+    <div id="taskList">
+        <h2>Tasks:</h2>
+        <ul>
+            <% tasks.forEach(task => { %>
+                <li>
+                    <strong>Name:</strong> <%= task.name %><br>
+                    <strong>Description:</strong> <%= task.description || 'N/A' %><br>
+                    <strong>Due Date:</strong> <%= task.dueDate || 'N/A' %>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+    <div id="inputContainer">
+        <form action="/trello/submit" method="post">
+            <label for="boardUrl">Enter Trello Board URL:</label>
+            <input type="text" id="boardUrl" name="boardUrl" placeholder="https://trello.com/b/boardId">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
