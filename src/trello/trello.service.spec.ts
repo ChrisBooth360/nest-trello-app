@@ -1,20 +1,19 @@
-// trello.service.spec.ts
-
 import { Test, TestingModule } from '@nestjs/testing';
 import { TrelloService } from './trello.service';
-import { ConfigService } from '@nestjs/config';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import axios from 'axios';
 import { TrelloEntity } from './trello.entity';
-import * as dotenv from 'dotenv';
+import { Repository } from 'typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 
-dotenv.config();
+// Create a mock for the axios library
 jest.mock('axios');
 
 describe('TrelloService', () => {
   let trelloService: TrelloService;
   let axiosGetMock: jest.Mock;
 
+  // Mock ConfigService
   const mockConfigService = {
     get: jest.fn((key) => {
       if (key === 'TRELLO_API_KEY') {
@@ -26,15 +25,17 @@ describe('TrelloService', () => {
     }),
   };
 
+  // Mock Task Repository
   const mockTaskRepository = {
     findOne: jest.fn(),
     save: jest.fn(),
     find: jest.fn(),
+    clear: jest.fn(), // Mock the clear method
   };
 
   beforeEach(async () => {
     axiosGetMock = jest.fn();
-    (axios.get as jest.Mock) = axiosGetMock;
+    axios.get = axiosGetMock; // Assign the mock to axios.get
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -58,119 +59,212 @@ describe('TrelloService', () => {
   });
 
   describe('getTasks', () => {
-    it('should fetch board tasks from Trello', async () => {
-      const boardId = 'sample-board-id';
-      const responseData = [
+    beforeEach(() => {
+      jest.clearAllMocks(); // Reset mock spies before each test
+    });
+
+    it('should fetch tasks from Trello and save them to the database', async () => {
+      // Mock Axios response
+      const mockTasks = [
         {
-          id: 'task-id-1',
+          id: '1',
           name: 'Task 1',
           due: null,
+          desc: 'Description for Task 1',
+        },
+        {
+          id: '2',
+          name: 'Task 2',
+          due: '2023-10-10',
           desc: null,
         },
-        // Add more task data as needed
       ];
+      axiosGetMock.mockResolvedValue({ data: mockTasks });
 
-      axiosGetMock.mockResolvedValueOnce({ data: responseData });
+      // Mock taskRepository.save method
+      const saveMock = jest.fn();
+      mockTaskRepository.save = saveMock;
 
-      const result = await trelloService.getTasks(boardId);
+      // Mock taskRepository.clear method
+      const clearMock = jest.fn();
+      mockTaskRepository.clear = clearMock;
 
-      expect(axiosGetMock).toHaveBeenCalledWith(
-        `https://api.trello.com/1/boards/${boardId}/cards`,
-        {
-          params: {
-            key: expect.any(String),
-            token: expect.any(String),
-          },
-        }
+      const boardId = 'OoAkCCdg';
+      const response = await trelloService.getTasks<TrelloEntity[]>(boardId);
+
+      // Check if the response is successful
+      expect(response.success).toBe(true);
+      expect(response.data).toEqual(mockTasks);
+
+      // Check if taskRepository.clear was called
+      expect(clearMock).toHaveBeenCalledTimes(1);
+
+      // Check if taskRepository.save was called for each task
+      expect(saveMock).toHaveBeenCalledTimes(mockTasks.length);
+
+      // Verify the saved tasks
+      expect(saveMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          name: 'Task 1',
+          cardId: '1',
+          dueDate: null,
+          description: 'Description for Task 1',
+        }),
       );
-
-      expect(result.success).toBeTruthy();
-      expect(result.data).toEqual(responseData);
+      expect(saveMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          name: 'Task 2',
+          cardId: '2',
+          dueDate: '2023-10-10',
+          description: null,
+        }),
+      );
     });
 
     it('should handle errors when fetching tasks from Trello', async () => {
-      const boardId = 'sample-board-id';
+      // Mock Axios error
+      const errorMessage = 'Error fetching tasks from Trello';
+      axiosGetMock.mockRejectedValue(new Error(errorMessage));
 
-      axiosGetMock.mockRejectedValueOnce(new Error('Network Error'));
+      const boardId = 'OoAkCCdg';
+      const response = await trelloService.getTasks<TrelloEntity[]>(boardId);
 
-      const result = await trelloService.getTasks(boardId);
-
-      expect(result.success).toBeFalsy();
-      expect(result.error).toContain('Error fetching tasks from Trello');
+      // Check if the response is not successful
+      expect(response.success).toBe(false);
+      expect(response.error).toEqual(`Error fetching tasks from Trello: ${errorMessage}`);
+      expect(response.data).toBe(null);
     });
   });
 
   describe('createTask', () => {
-    it('should create a task', async () => {
-      // Arrange
-      const name = 'Test Task';
-      const cardId = '12345';
-      const dueDate = '2023-12-31';
-      const description = 'Test description';
+    it('should create a new task with valid input', async () => {
+      const name = 'New Task';
+      const cardId = '3';
+      const dueDate = '2023-11-01';
+      const description = 'Description for New Task';
 
-      const newTask = new TrelloEntity();
-      newTask.name = name;
-      newTask.cardId = cardId;
-      newTask.dueDate = dueDate;
-      newTask.description = description;
+      // Create a sample task for assertion
+      const sampleTask: TrelloEntity = {
+        name,
+        cardId,
+        dueDate, // Keep dueDate as a string
+        description,
+      };
+      // Mock taskRepository.save method
+      const saveMock = jest.fn().mockResolvedValue(sampleTask);
+      mockTaskRepository.save = saveMock;
 
-      const mockSavedTask = { ...newTask };
+      // Call the createTask method
+      const createdTask = await trelloService.createTask(name, cardId, dueDate, description);
 
-      mockTaskRepository.findOne.mockResolvedValueOnce(undefined);
-      mockTaskRepository.save.mockResolvedValueOnce(mockSavedTask);
+      // Check if taskRepository.save was called with the correct parameters
+      expect(saveMock).toHaveBeenCalledTimes(1);
+      expect(saveMock).toHaveBeenCalledWith(sampleTask);
 
-      // Act
-      const result = await trelloService.createTask(name, cardId, dueDate, description);
-
-      // Assert
-      expect(mockTaskRepository.findOne).toHaveBeenCalledWith({ where: { cardId } });
-      expect(mockTaskRepository.save).toHaveBeenCalledWith(newTask);
-      expect(result).toEqual(mockSavedTask);
+      // Check if the created task matches the returned task
+      expect(createdTask).toEqual(sampleTask);
     });
 
-    it('should update an existing task', async () => {
-      // Arrange
-      const name = 'Updated Task Name';
-      const cardId = '12345';
-      const dueDate = '2023-11-31';
-      const description = 'Updated Task Description';
+    it('should create a task with null values for undefined input', async () => {
+      const name = 'Task with Null Values';
+      const cardId = '4';
 
-      const existingTask = new TrelloEntity();
-      existingTask.name = 'Original Task Name';
-      existingTask.cardId = cardId;
-
-      mockTaskRepository.findOne.mockResolvedValueOnce(existingTask);
-
-      const updatedTask = { ...existingTask };
-      updatedTask.name = name;
-      updatedTask.dueDate = dueDate;
-      updatedTask.description = description;
-
-      mockTaskRepository.save.mockResolvedValueOnce(updatedTask);
-
-      // Act
-      const result = await trelloService.createTask(name, cardId, dueDate, description);
-
-      // Assert
-      expect(mockTaskRepository.findOne).toHaveBeenCalledWith({ where: { cardId } });
-      expect(mockTaskRepository.save).toHaveBeenCalledWith(updatedTask);
-      expect(result).toEqual(updatedTask);
+      const sampleTask = {
+        name: name,
+        cardId: cardId,
+        dueDate: null,
+        description: null,
+      }
+    
+      // Mock taskRepository.save method to return a resolved value
+      const saveMock = jest.fn().mockResolvedValue(sampleTask);
+      mockTaskRepository.save = saveMock;
+    
+      // Call the createTask method with undefined dueDate and description
+      const createdTask = await trelloService.createTask(name, cardId, undefined, undefined);
+    
+      // Check if taskRepository.save was called with null values for dueDate and description
+      expect(saveMock).toHaveBeenCalledTimes(1);
+      expect(saveMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          name: 'Task with Null Values',
+          cardId: '4',
+          dueDate: null,
+          description: null,
+        })
+      );
+    
+      // Check if the created task matches the returned task with null values
+      expect(createdTask).toEqual(
+        expect.objectContaining({
+          name: 'Task with Null Values',
+          cardId: '4',
+          dueDate: null,
+          description: null,
+        })
+      );
     });
+    
 
-    it('should handle errors', async () => {
-      // Arrange
-      const name = 'Test Task';
-      const cardId = 'test-card-id';
-      const dueDate = '2023-12-31';
-      const description = 'Test description';
+    it('should handle errors when saving a task', async () => {
+      const name = 'Task with Error';
+      const cardId = '5';
+      const errorMessage = 'Error saving task';
 
-      mockTaskRepository.findOne.mockRejectedValueOnce(new Error('Database error'));
+      // Mock taskRepository.save method to throw an error
+      mockTaskRepository.save.mockRejectedValue(new Error(errorMessage));
 
-      // Act & Assert
-      await expect(
-        trelloService.createTask(name, cardId, dueDate, description)
-      ).rejects.toThrowError('Database error');
+      // Call the createTask method
+      await expect(trelloService.createTask(name, cardId, undefined, undefined)).rejects.toThrow(errorMessage);
     });
   });
-
+  describe('getAllTasks', () => {
+    it('should return an array of tasks', async () => {
+      // Create an array of sample tasks to be returned by the mock taskRepository
+      const sampleTasks = [
+        {
+          name: 'Task 1',
+          cardId: '1',
+          dueDate: '2023-10-10',
+          description: 'Description for Task 1',
+        },
+        {
+          name: 'Task 2',
+          cardId: '2',
+          dueDate: null,
+          description: 'Description for Task 2',
+        },
+      ];
+  
+      // Mock taskRepository.find method to return the sample tasks
+      const findMock = jest.fn().mockResolvedValue(sampleTasks);
+      mockTaskRepository.find = findMock;
+  
+      // Call the getAllTasks method
+      const tasks = await trelloService.getAllTasks();
+  
+      // Check if taskRepository.find was called
+      expect(findMock).toHaveBeenCalledTimes(1);
+  
+      // Check if the returned tasks match the sample tasks
+      expect(tasks).toEqual(sampleTasks);
+    });
+  
+    it('should handle errors when fetching tasks', async () => {
+      // Mock taskRepository.find method to throw an error
+      const errorMessage = 'Error fetching tasks';
+      mockTaskRepository.find = jest.fn().mockRejectedValue(new Error(errorMessage));
+  
+      // Call the getAllTasks method
+      try {
+        await trelloService.getAllTasks();
+        // If it doesn't throw an error, the test should fail
+        expect(true).toBe(false);
+      } catch (error) {
+        // Check if the error message matches
+        expect(error.message).toBe(errorMessage);
+      }
+    });
+  });
+  
 });

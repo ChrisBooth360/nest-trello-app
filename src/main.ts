@@ -11,10 +11,6 @@ async function bootstrap() {
   // Set EJS as the view engine
   app.engine('ejs', ejs.renderFile);
   app.setViewEngine('ejs');
-  
-  // app.useStaticAssets('public'); // Serve static files from the 'public' directory
-
- 
 
   await app.listen(3000);
 }
