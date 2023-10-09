@@ -21,7 +21,7 @@ export class TrelloController {
     // Extract the boardId from the URL
     let parts = boardUrl.split('/');
     const boardId = parts[parts.length - 2]; // Updated boardId extraction
-    console.log(boardId)
+    
     // Manually create the redirect URL
     const redirectUrl = `/trello/${boardId}/tasks`;
 
