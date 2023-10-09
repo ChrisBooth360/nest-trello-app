@@ -5,7 +5,7 @@ import { TrelloService } from './trello.service';
 import { TrelloEntity } from './trello.entity';
 import { Response, Request } from 'express';
 
-@Controller('trello')
+@Controller()
 export class TrelloController {
   constructor(private readonly trelloService: TrelloService) { }
 
@@ -15,7 +15,7 @@ export class TrelloController {
     return {};
   }
 
-  @Post('submit')
+  @Post('trello/submit')
   async submitForm(@Body() body: { boardUrl: string }, @Req() req: Request, @Res() res: Response) {
     const { boardUrl } = body;
     // Extract the boardId from the URL
@@ -29,7 +29,7 @@ export class TrelloController {
     res.redirect(redirectUrl);
   }
 
-  @Get(':boardId/tasks')
+  @Get('trello/:boardId/tasks')
   @Render('tasks') // Render the 'tasks.ejs' template
   async getBoardTasks(@Param('boardId') boardId: string, @Res() res: Response): Promise<{ tasks: TrelloEntity[] }> {
     const trelloResponse = await this.trelloService.getTasks<TrelloEntity[]>(boardId);
